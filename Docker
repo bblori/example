@@ -1,0 +1,5 @@
+FROM docker.io/bitnami/laravel:10
+COPY . .
+RUN composer install
+CMD php artisan serve --host=193.42.63.19
+EXPOSE 80
