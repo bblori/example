@@ -1,12 +1,17 @@
-FROM php:8.2
-WORKDIR /var/www/html
+FROM php:8.2 as php
 
-# Mod Rewrite
-RUN a2enmod rewrite
+RUN apt-get update -y
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
+RUN docker-php-ext-install pdo pdo_mysql bcmath
 
-RUN apt-get update -y && apt-get install -y libicu-dev unzip zip
+RUN pecl install -o -f redis \
+    && rm -rf /tm/pear \
+    && docker-php-ext-enable redis
 
-# Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+WORKDIR /var/www
+COPY . .
 
-RUN docker-php-ext-install gettext intl pdo_mysql
+COPY --from=composer:2.6.4 /usr/bin/composer /usr/bin/composer
+
+ENV PORT=8000
+ENTRYPOINT [ "Docker/entrypoint.sh" ]
