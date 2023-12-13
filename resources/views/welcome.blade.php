@@ -8,6 +8,6 @@
 </head>
 <body>
     <H1>Hello Világ ! </H1>
-    <h2>Webhook {{ laravel.version }}</h2>
+    <h2>Webhook not fixed</h2>
 </body>
 </html>
